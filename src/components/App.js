@@ -43,10 +43,15 @@ function App() {
 
   const handleSignIn = useCallback(
     async (data) => {
-      const { token } = await login(data);
-      localStorage.setItem("jwt", token);
-      navigate("/");
-      setIsLoggedIn(true);
+      try {
+        const { token } = await login(data);
+        localStorage.setItem("jwt", token);
+        navigate("/");
+        setIsLoggedIn(true);
+      } catch (err) {
+        setRegisterTooltip(true);
+        setRegisterStatus("error");
+      }
     },
     [navigate]
   );
@@ -59,6 +64,8 @@ function App() {
         setEmail(res.data.email);
         setIsLoggedIn(true);
         navigate("/");
+      }).catch(err => {
+        console.log(err)
       });
     }
   }, [navigate]);

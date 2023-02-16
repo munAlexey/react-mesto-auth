@@ -1,5 +1,13 @@
 const BASE_URL = "https://auth.nomoreparties.co";
 
+const _checkResponse = (response) => {
+  if (response.ok) {
+    return response.json();
+  } else {
+    return Promise.reject(`Ошибка: ${response.status}`);
+  }
+};
+
 export const login = async (data) => {
   const response = await fetch(`${BASE_URL}/signin`, {
     method: "POST",
@@ -9,12 +17,7 @@ export const login = async (data) => {
     },
     body: JSON.stringify(data),
   });
-
-  if (response.ok) {
-    return response.json();
-  } else {
-    return Promise.reject(`Ошибка: ${response.status}`);
-  }
+  return _checkResponse(response);
 };
 
 export const signup = async (data) => {
@@ -26,12 +29,7 @@ export const signup = async (data) => {
     },
     body: JSON.stringify(data),
   });
-
-  if (response.ok) {
-    return response.json();
-  } else {
-    return Promise.reject(`Ошибка: ${response.status}`);
-  }
+  return _checkResponse(response);
 };
 
 export const checkAuth = async (jwt) => {
@@ -42,9 +40,5 @@ export const checkAuth = async (jwt) => {
       Authorization: `Bearer ${jwt}`,
     },
   });
-  if (response.ok) {
-    return response.json();
-  } else {
-    return Promise.reject(`Ошибка: ${response.status}`);
-  }
+  return _checkResponse(response);
 };
